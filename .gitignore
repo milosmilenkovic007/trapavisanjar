@@ -1,0 +1,17 @@
+# Node modules & build files
+node_modules/
+npm-debug.log*
+yarn-error.log*
+*.log
+
+# SCSS cache
+.sass-cache/
+*.css.map
+
+# Composer
+vendor/
+composer.lock
+
+# Mac & VS Code system files
+.DS_Store
+.vscode/
