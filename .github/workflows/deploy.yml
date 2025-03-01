@@ -16,15 +16,15 @@ jobs:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.PLESK_SSH_KEY }}
 
       - name: Deploy to Plesk Server
         run: |
-          rsync -avz --delete ./ psacln@your-plesk-server.com:/var/www/vhosts/YOUR_DOMAIN.com/httpdocs/wp-content/themes/trapavisanjar
+          rsync -avz --delete ./ trapavisanjar.com_ots16k3uzso@52.200.36.128:/var/www/vhosts/trapavisanjar.com/httpdocs/wp-content/themes/trapavisanjar
 
       - name: Install NPM dependencies & build
         run: |
-          ssh psacln@your-plesk-server.com << 'EOF'
+          ssh trapavisanjar.com_ots16k3uzso@52.200.36.128 << 'EOF'
             cd /var/www/vhosts/trapavisanjar.com/httpdocs/wp-content/themes/trapavisanjar
             npm install
             npm run build
