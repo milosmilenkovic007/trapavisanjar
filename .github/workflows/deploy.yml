@@ -3,7 +3,7 @@ name: Deploy WordPress Theme to Plesk
 on:
   push:
     branches:
-      - main  # Pokreće se kada se commituje u main branch
+      - main
 
 jobs:
   deploy:
@@ -17,6 +17,9 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.PLESK_SSH_KEY }}
+
+      - name: Add server to known_hosts
+        run: ssh-keyscan -H 52.200.36.128 >> ~/.ssh/known_hosts
 
       - name: Deploy to Plesk Server
         run: |
