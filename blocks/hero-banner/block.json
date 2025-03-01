@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "trapavisanjar/hero-banner",
+    "title": "Hero Banner",
+    "description": "Custom Hero Banner block",
+    "category": "design",
+    "icon": "cover-image",
+    "keywords": ["hero", "banner", "trapavisanjar"],
+    "supports": {
+        "align": true,
+        "html": false
+    },
+    "textdomain": "trapavisanjar",
+    "editorScript": "file:build/index.js",
+    "editorStyle": "file:./editor.scss",
+    "style": "file:./style.scss"
+}
