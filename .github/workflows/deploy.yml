@@ -1,0 +1,31 @@
+name: Deploy WordPress Theme to Plesk
+
+on:
+  push:
+    branches:
+      - main  # Pokreće se kada se commituje u main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Plesk Server
+        run: |
+          rsync -avz --delete ./ psacln@your-plesk-server.com:/var/www/vhosts/YOUR_DOMAIN.com/httpdocs/wp-content/themes/trapavisanjar
+
+      - name: Install NPM dependencies & build
+        run: |
+          ssh psacln@your-plesk-server.com << 'EOF'
+            cd /var/www/vhosts/trapavisanjar.com/httpdocs/wp-content/themes/trapavisanjar
+            npm install
+            npm run build
+          EOF
