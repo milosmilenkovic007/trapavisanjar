@@ -1,0 +1,63 @@
+.hero-banner-editor {
+    position: relative;
+    padding: 20px;
+    border: 1px dashed #ccc;
+    background: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+
+    &__bg-image {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    &__content {
+        width: 100%;
+        text-align: center;
+    }
+
+    &__upload-btn {
+        display: inline-block;
+        padding: 12px 20px;
+        background: #1e73be;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+
+        &:hover {
+            background: #145a8a;
+        }
+    }
+
+    &__input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    &__title-input {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    &__description-input {
+        font-size: 1.2rem;
+    }
+
+    &__lottie-input {
+        font-size: 1rem;
+        color: #333;
+    }
+}

@@ -1,0 +1,107 @@
+// Header Styles - Transparent & Centered Menu
+
+.header {
+    position: absolute; // Header lebdi iznad sadržaja
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(10px);
+    padding: 15px 30px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+// Logo (levo)
+.header__logo {
+    max-width: 250px; // Ograničena širina logoa
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+// Primary navigation (sredina)
+.header__nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    
+    ul {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+        padding: 0;
+        margin: 0;
+
+        li {
+            a {
+                text-decoration: none;
+                color: white;
+                font-size: 16px;
+                font-weight: 600;
+                transition: color 0.3s ease;
+
+                &:hover {
+                    color: #ffcc00; // Efekat na hover
+                }
+            }
+        }
+    }
+}
+
+// Responsive - Mobilni uređaji
+@media (max-width: 768px) {
+    .header {
+        padding: 10px 20px;
+    }
+
+    .header__nav {
+        display: none; // Meni je skriven dok se ne klikne hamburger
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 15px;
+        text-align: center;
+
+        ul {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+
+    .header__nav.active {
+        display: flex; // Prikazuje meni kad je aktivan
+    }
+
+    .header__burger {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+
+        span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            transition: 0.3s;
+        }
+    }
+
+    .header__burger.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .header__burger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .header__burger.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+}

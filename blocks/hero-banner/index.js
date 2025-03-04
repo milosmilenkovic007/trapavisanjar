@@ -1,19 +1,26 @@
-const registerHeroBannerBlock = () => {
-    if (wp.blocks.getBlockType("trapavisanjar/hero-banner")) {
-        return; // Blok je već registrovan, nema potrebe za duplom registracijom
-    }
+import { registerBlockType } from '@wordpress/blocks';
+import Edit from './edit.js';
+import Save from './save.js';
 
-    wp.blocks.registerBlockType("trapavisanjar/hero-banner", {
+// Funkcija za registraciju bloka
+const registerHeroBannerBlock = () => {
+    registerBlockType("trapavisanjar/hero-banner", {
         title: "Hero Banner",
-        category: "layout",
+        category: "design",
         icon: "cover-image",
         supports: { html: false },
-        edit: () => wp.element.createElement("div", {}, "Hero Banner - Gutenberg Blok"),
-        save: () => wp.element.createElement("div", {}, "Hero Banner - Gutenberg Blok")
+        attributes: {
+            bgImage: { type: "string", default: "" },
+            title: { type: "string", default: "Hero Title" },
+            lottieJson: { type: "string", default: "" },
+            description: { type: "string", default: "Short description here..." }
+        },
+        edit: Edit,
+        save: Save
     });
 };
 
-// Proveravamo da li je wp.blocks dostupan
+// Proveravamo da li je wp.blocks dostupan i registrujemo blok
 if (typeof wp !== "undefined" && typeof wp.blocks !== "undefined") {
     registerHeroBannerBlock();
 } else {
@@ -23,10 +30,3 @@ if (typeof wp !== "undefined" && typeof wp.blocks !== "undefined") {
         }
     });
 }
-
-// Očekujemo da se blok pojavi u listi blokova
-setTimeout(() => {
-    if (typeof wp !== "undefined" && typeof wp.blocks !== "undefined") {
-        wp.blocks.getBlockType("trapavisanjar/hero-banner");
-    }
-}, 3000);

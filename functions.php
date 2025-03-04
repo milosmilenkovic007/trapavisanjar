@@ -1,4 +1,17 @@
 <?php
+
+function trapavisanjar_enqueue_block_editor_assets() {
+    wp_enqueue_script(
+        'trapavisanjar-hero-banner-editor-script',
+        get_template_directory_uri() . '/blocks/hero-banner/build/index.js',
+        [ 'wp-blocks', 'wp-element', 'wp-editor', 'wp-i18n', 'wp-components', 'wp-data', 'wp-hooks' ],
+        filemtime(get_template_directory() . '/blocks/hero-banner/build/index.js'),
+        true
+    );
+}
+add_action('enqueue_block_editor_assets', 'trapavisanjar_enqueue_block_editor_assets');
+
+
 // Učitavanje osnovnih klasa
 require_once get_template_directory() . '/inc/class-theme-setup.php';
 require_once get_template_directory() . '/inc/class-assets.php';
@@ -55,4 +68,5 @@ add_action('rest_api_init', function() {
         return $value;
     });
 });
+
 ?>

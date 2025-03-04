@@ -10,6 +10,11 @@ class Theme_Setup {
         add_theme_support('align-wide');
         add_theme_support('editor-styles');
         add_editor_style('assets/css/editor-style.css');
+
+        // Register navigation menus
+        register_nav_menus([
+            'primary' => __('Primary Menu', 'trapavisanjar'),
+            'footer' => __('Footer Menu', 'trapavisanjar'),
+        ]);
     }
 }
-?>

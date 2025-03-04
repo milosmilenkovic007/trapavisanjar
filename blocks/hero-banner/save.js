@@ -1,9 +1,20 @@
 import { useBlockProps } from '@wordpress/block-editor';
 
-export default function Save() {
+const Save = ({ attributes }) => {
+    const { bgImage, title, lottieJson, description } = attributes;
+
     return (
-        <div {...useBlockProps.save()}>
-            <h2>Hero Banner - Gutenberg Blok</h2>
+        <div { ...useBlockProps.save({ className: 'hero-banner' }) }>
+            { bgImage && <img src={bgImage} alt="Hero Background" className="hero-banner-bg" /> }
+            <div className="hero-banner-content">
+                { title && <h2 className="hero-banner-title">{title}</h2> }
+                { description && <p className="hero-banner-description">{description}</p> }
+                { lottieJson && (
+                    <lottie-player src={lottieJson} background="transparent" speed="1" loop autoplay></lottie-player>
+                )}
+            </div>
         </div>
     );
-}
+};
+
+export default Save;
