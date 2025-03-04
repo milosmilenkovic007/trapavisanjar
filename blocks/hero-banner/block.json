@@ -9,10 +9,11 @@
     "keywords": ["hero", "banner", "trapavisanjar"],
     "supports": {
         "align": true,
-        "html": false
+        "html": false,
+        "inserter": true
     },
-    "textdomain": "trapavisanjar",
-    "editorScript": "file:build/index.js",
-    "editorStyle": "file:./editor.scss",
-    "style": "file:./style.scss"
+    "editorScript": "trapavisanjar-hero-banner-editor-script",
+    "style": "file:./build/style.css",
+    "editorStyle": "file:./build/editor.css",
+    "viewScript": "trapavisanjar-hero-banner-view-script"
 }
