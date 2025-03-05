@@ -7,7 +7,7 @@
     width: 100%;
     z-index: 1000;
     background: rgba(0, 0, 0, 0);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(0px);
     padding: 15px 30px;
     
     display: flex;
@@ -17,7 +17,10 @@
 
 // Logo (levo)
 .header__logo {
-    max-width: 250px; // Ograničena širina logoa
+    max-width: 325px;
+    padding-left: 40px;
+    padding-top: 10px;
+
     img {
         width: 100%;
         height: auto;
