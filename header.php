@@ -12,7 +12,7 @@
 <header class="header">
     <div class="header__logo">
         <a href="<?php echo home_url(); ?>">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/trapavisanjar.png" alt="Logo">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/trapavisanjar.svg" alt="Logo">
         </a>
     </div>
 
