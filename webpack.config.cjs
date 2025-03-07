@@ -1,29 +1,25 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-    mode: 'development',
+    mode: "development",
     entry: {
-        // ✅ Gutenberg block styles (must go to /build)
-        index: './blocks/hero-banner/index.js',
-        style: './blocks/hero-banner/style.scss',
-        editor: './blocks/hero-banner/editor.scss',
-
-        // ✅ Theme assets (must go to /assets)
-        main: './src/js/main.js',
-        theme: './src/scss/style.scss'
+        index: "./blocks/hero-banner/index.js",
+        style: "./blocks/hero-banner/style.scss",
+        editor: "./blocks/hero-banner/editor.scss",
+        view: "./blocks/hero-banner/view.js"
     },
     output: {
         filename: (pathData) => {
-            // ✅ Make sure all block-related files go into build/
-            return ['index', 'style', 'editor'].includes(pathData.chunk.name)
-                ? 'blocks/hero-banner/build/[name].js'
-                : 'assets/js/[name].js'; // ✅ Theme-related JS files go to assets/js/
+            return ["index", "style", "editor", "view"].includes(pathData.chunk.name)
+                ? "blocks/hero-banner/build/[name].js"
+                : "assets/js/[name].js";
         },
         path: path.resolve(__dirname)
     },
     resolve: {
-        extensions: ['.js'],
+        extensions: [".js"]
+    
     },
     module: {
         rules: [
@@ -31,9 +27,10 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader',
+                    loader: "babel-loader",
                     options: {
-                        presets: ['@wordpress/babel-preset-default']
+                        presets: ["@wordpress/babel-preset-default"],
+                        plugins: ["@babel/plugin-syntax-import-meta"]
                     }
                 }
             },
@@ -41,19 +38,19 @@ module.exports = {
                 test: /\.scss$/,
                 oneOf: [
                     {
-                        include: path.resolve(__dirname, 'blocks/hero-banner/'),
+                        include: path.resolve(__dirname, "blocks/hero-banner/"),
                         use: [
                             MiniCssExtractPlugin.loader,
-                            'css-loader',
-                            'sass-loader'
+                            "css-loader",
+                            "sass-loader"
                         ]
                     },
                     {
-                        include: path.resolve(__dirname, 'src/scss/'),
+                        include: path.resolve(__dirname, "src/scss/"),
                         use: [
                             MiniCssExtractPlugin.loader,
-                            'css-loader',
-                            'sass-loader'
+                            "css-loader",
+                            "sass-loader"
                         ]
                     }
                 ]
@@ -63,21 +60,20 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
             filename: (pathData) => {
-                // ✅ Ensure block styles go to build/ and theme styles go to assets/css/
-                return ['style', 'editor'].includes(pathData.chunk.name)
-                    ? 'blocks/hero-banner/build/[name].css'
-                    : 'assets/css/[name].css';
+                return ["style", "editor"].includes(pathData.chunk.name)
+                    ? "blocks/hero-banner/build/[name].css"
+                    : "assets/css/[name].css";
             }
         })
     ],
     optimization: {
-        splitChunks: false,
+        splitChunks: false
     },
     externals: {
-        '@wordpress/blocks': 'wp.blocks',
-        '@wordpress/element': 'wp.element',
-        '@wordpress/block-editor': 'wp.blockEditor',
-        '@wordpress/components': 'wp.components',
-        '@wordpress/i18n': 'wp.i18n'
+        "@wordpress/blocks": "wp.blocks",
+        "@wordpress/element": "wp.element",
+        "@wordpress/block-editor": "wp.blockEditor",
+        "@wordpress/components": "wp.components",
+        "@wordpress/i18n": "wp.i18n",
     }
 };

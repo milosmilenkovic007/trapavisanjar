@@ -10,9 +10,11 @@
     "dependencies": {
         "@wordpress/block-editor": "^14.13.0",
         "@wordpress/blocks": "^14.7.0",
-        "@wordpress/scripts": "^30.11.0"
+        "@wordpress/scripts": "^30.11.0",
+        "three": "^0.174.0"
     },
     "devDependencies": {
+        "@babel/plugin-syntax-import-meta": "^7.10.4",
         "@wordpress/babel-preset-default": "^7.1.2",
         "babel-loader": "^9.1.0",
         "css-loader": "^6.8.1",

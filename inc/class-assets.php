@@ -33,6 +33,7 @@ class Assets_Manager {
     public static function enqueue_block_assets() {
         if (!is_admin()) {
             $block_style_path = get_template_directory() . '/blocks/hero-banner/build/style.css';
+            $block_view_script_path = get_template_directory() . '/blocks/hero-banner/build/view.js';
 
             if (file_exists($block_style_path)) {
                 wp_enqueue_style(
@@ -41,6 +42,23 @@ class Assets_Manager {
                     array(),
                     filemtime($block_style_path)
                 );
+            }
+
+            if (file_exists($block_view_script_path)) {
+                wp_enqueue_script(
+                    'trapavisanjar-hero-banner-view-script',
+                    get_template_directory_uri() . '/blocks/hero-banner/build/view.js',
+                    array(),
+                    filemtime($block_view_script_path),
+                    true
+                );
+
+                add_filter('script_loader_tag', function ($tag, $handle) {
+                    if ($handle === 'trapavisanjar-hero-banner-view-script') {
+                        return str_replace('<script ', '<script type="module" ', $tag);
+                    }
+                    return $tag;
+                }, 10, 2);
             }
         }
     }
