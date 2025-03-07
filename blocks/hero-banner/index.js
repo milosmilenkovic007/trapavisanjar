@@ -12,8 +12,9 @@ const registerHeroBannerBlock = () => {
         attributes: {
             bgImage: { type: "string", default: "" },
             title: { type: "string", default: "Hero Title" },
+            description: { type: "string", default: "Short description here..." },
             lottieJson: { type: "string", default: "" },
-            description: { type: "string", default: "Short description here..." }
+            threeModelUrl: { type: "string", default: "" } // ✅ Dodali smo atribut za Three.js model
         },
         edit: Edit,
         save: Save

@@ -6,11 +6,18 @@
     "description": "Custom Hero Banner block",
     "category": "design",
     "icon": "cover-image",
-    "keywords": ["hero", "banner", "trapavisanjar"],
+    "keywords": ["hero", "banner", "3D", "three.js"],
     "supports": {
         "align": ["full"],
         "html": false,
         "inserter": true
+    },
+    "attributes": {
+        "bgImage": { "type": "string", "default": "" },
+        "title": { "type": "string", "default": "Hero Title" },
+        "description": { "type": "string", "default": "Short description here..." },
+        "lottieJson": { "type": "string", "default": "" },
+        "threeModelUrl": { "type": "string", "default": "" }
     },
     "editorScript": "trapavisanjar-hero-banner-editor-script",
     "style": "file:./build/style.css",

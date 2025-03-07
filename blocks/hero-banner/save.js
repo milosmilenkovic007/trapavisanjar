@@ -1,10 +1,10 @@
 import { useBlockProps } from '@wordpress/block-editor';
 
 const Save = ({ attributes }) => {
-    const { bgImage, title, lottieJson, description } = attributes;
+    const { bgImage, title, description, lottieJson, threeModelUrl } = attributes;
 
     return (
-        <div { ...useBlockProps.save({ className: 'hero-banner' }) }>
+        <div { ...useBlockProps.save({ className: 'hero-banner', 'data-glb-url': threeModelUrl }) }>
             { bgImage && <img src={bgImage} alt="Hero Background" className="hero-banner-bg" /> }
             <div className="hero-banner-content">
                 { title && <h2 className="hero-banner-title">{title}</h2> }
@@ -12,6 +12,7 @@ const Save = ({ attributes }) => {
                 { lottieJson && (
                     <lottie-player src={lottieJson} background="transparent" speed="1" loop autoplay></lottie-player>
                 )}
+                { threeModelUrl && <div className="three-container"></div> }
             </div>
         </div>
     );
