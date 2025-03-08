@@ -1,5 +1,5 @@
 // ✅ PRAVILAN IMPORT
-import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, DirectionalLight, Box3, Vector3, Clock, AnimationMixer } from "three";
+import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, DirectionalLight, AnimationMixer, Clock, Raycaster, Vector2, LoopOnce } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
@@ -31,17 +31,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // ✅ Kreiranje Three.js scene
     const scene = new Scene();
     const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 1, 5); // Privremena pozicija kamere
 
-    // ✅ Renderer - zauzima ceo ekran
+    // ✅ PODEŠAVANJE POČETNOG UGLa KAMERE
+    camera.position.set(1, 1.5, 8); // Pomerena kamera
+    camera.lookAt(0, 1, 0);  // Gleda blago iznad centra modela
+    
+
+    // ✅ Renderer - full screen
     const renderer = new WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.domElement.style.position = "absolute";
-    renderer.domElement.style.top = "25%";
-    renderer.domElement.style.left = "0";
-    renderer.domElement.style.width = "100vw";
-    renderer.domElement.style.height = "100vh";
     container.appendChild(renderer.domElement);
     console.log("✅ Renderer created and appended!");
 
@@ -67,62 +66,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let mixer; // Three.js Animation Mixer
     const clock = new Clock();
+    let action; // Akcija za animaciju
+    let model;  // GLTF model
+    const raycaster = new Raycaster();
+    const mouse = new Vector2();
+    let isPaused = false;  // Da li je animacija pauzirana?
+    let isPlaying = false; // Da li je animacija u toku?
+    let isFinished = true; // Da li je animacija završena?
 
     loader.load(
         modelUrl,
         function (gltf) {
-            const model = gltf.scene;
+            model = gltf.scene;
             scene.add(model);
+            model.position.set(0, 0, 0); // Centriraj model
+            model.scale.set(1, 1, 1); // Reset skaliranja
+          
+
+
+
             console.log("✅ Model loaded!", model);
 
-            // 📌 AUTOMATSKO CENTRIRANJE I SKALIRANJE MODELA
-            const box = new Box3().setFromObject(model);
-            const size = new Vector3();
-            box.getSize(size);
-
-            const maxSize = Math.max(size.x, size.y, size.z);
-            const desiredSize = 2;
-            const scale = desiredSize / maxSize;
-            model.scale.set(scale, scale, scale);
-
-            const center = new Vector3();
-            box.getCenter(center);
-            model.position.sub(center);
-
-            const cameraDistance = maxSize * 1.5;
-            camera.position.set(0, size.y / 2, cameraDistance);
-            camera.lookAt(0, 0, 0);
-
-            console.log("📏 Model scaled & centered!", { scale, cameraDistance });
-
-            // ✅ Ako model ima animacije, pokreće ih
+            // ✅ Ako model ima animacije, učitaj prvu
             if (gltf.animations.length > 0) {
                 mixer = new AnimationMixer(model);
-                gltf.animations.forEach((clip) => {
-                    const action = mixer.clipAction(clip);
-                    action.play();
+                action = mixer.clipAction(gltf.animations[0]); // Uzimamo prvu animaciju
+                action.clampWhenFinished = true; // Stopira se nakon završetka
+                action.setLoop(LoopOnce); // ✅ Loop samo jednom
+
+                // ✅ Detektujemo kada se animacija završi preko MIXER-a
+                mixer.addEventListener("finished", () => {
+                    console.log("✅ Animation finished!");
+                    isFinished = true;
+                    isPlaying = false;
+                    isPaused = false;
                 });
-                console.log("🎬 GLTF Animations started!");
+
+                console.log("🎬 Animation loaded but NOT playing.");
             } else {
-                console.warn("⚠️ No animations found in GLTF file. Rotating manually.");
+                console.warn("⚠️ No animations found in GLTF file.");
             }
 
-            // ✅ Pokretanje animacije
+            // ✅ Pokretanje render petlje
             function animate() {
                 requestAnimationFrame(animate);
-
-                // Ako nema animacija, rotiramo model ručno
-                if (!mixer) {
-                    model.rotation.y += 0.005;
-                } else {
-                    mixer.update(clock.getDelta());
-                }
-
-                controls.update(); // OrbitControls update
+                const delta = clock.getDelta();
+                if (mixer) mixer.update(delta);
+                controls.update();
                 renderer.render(scene, camera);
             }
             animate();
-            console.log("✅ Animation started!");
+            console.log("✅ Animation loop started!");
         },
         function (xhr) {
             console.log(`⌛ Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
@@ -131,6 +125,43 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("❌ ERROR loading model:", error);
         }
     );
+
+    // ✅ Funkcija za detekciju klika na model
+    function onClick(event) {
+        // Normalizovane koordinate miša (-1 do 1)
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObject(model, true);
+
+        if (intersects.length > 0 && action) {
+            if (isFinished) {
+                // ✅ Restart animacije nakon završetka
+                console.log("▶️ Restarting animation!");
+                action.reset(); // Resetuje animaciju
+                action.play();
+                isFinished = false;
+                isPaused = false;
+                isPlaying = true;
+            } else if (isPlaying) {
+                // ✅ Pauziraj animaciju ako je u toku
+                console.log("⏸️ Pausing animation!");
+                action.paused = true;
+                isPaused = true;
+                isPlaying = false;
+            } else if (isPaused) {
+                // ✅ Nastavi animaciju ako je pauzirana
+                console.log("▶️ Resuming animation!");
+                action.paused = false;
+                isPaused = false;
+                isPlaying = true;
+            }
+        }
+    }
+
+    // ✅ Dodaj event listener za klik na knjigu
+    window.addEventListener("click", onClick);
 
     // ✅ Resize event za full width i height
     window.addEventListener("resize", function () {
