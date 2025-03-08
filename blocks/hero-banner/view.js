@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
             scene.add(model);
             model.position.set(0, 0, 0); // Centriraj model
             model.scale.set(1, 1, 1); // Reset skaliranja
-          
+        
 
 
 

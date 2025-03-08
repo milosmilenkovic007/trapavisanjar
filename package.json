@@ -3,15 +3,25 @@
     "version": "1.0.0",
     "description": "Custom WordPress theme with Gutenberg blocks",
     "type": "module",
-    "scripts": {
-        "build": "webpack --mode production",
-        "start": "webpack --watch"
-    },
+"scripts": {
+    "build": "webpack --mode production",
+    "start": "webpack --watch",
+    "optimize:gltf": "gltf-transform optimize assets/books/book3.gltf assets/books/book3_optimized.gltf --texture-compress webp",
+    "compress:draco": "gltf-transform draco assets/books/book3_optimized.gltf assets/books/book3_draco.gltf --method edgebreaker",
+    "compress:meshopt": "gltf-transform meshopt assets/books/book3_draco.gltf assets/books/book3_meshopt.gltf --level medium",
+    "resize:textures": "gltf-transform resize assets/books/book3_meshopt.gltf assets/books/book3_final.gltf --width 1024 --height 1024"
+},
+
     "dependencies": {
         "@wordpress/block-editor": "^14.13.0",
         "@wordpress/blocks": "^14.7.0",
         "@wordpress/scripts": "^30.11.0",
-        "three": "^0.174.0"
+        "three": "^0.174.0",
+        "@gltf-transform/core": "^4.1.2",
+        "@gltf-transform/extensions": "^4.1.2",
+        "@gltf-transform/functions": "^4.1.2",
+        "draco3dgltf": "^1.5.6",
+        "sharp": "^0.32.6"
     },
     "devDependencies": {
         "@babel/plugin-syntax-import-meta": "^7.10.4",
@@ -22,6 +32,7 @@
         "sass-loader": "^16.0.5",
         "style-loader": "^3.3.3",
         "webpack": "^5.88.0",
-        "webpack-cli": "^5.1.4"
+        "webpack-cli": "^5.1.4",
+        "@gltf-transform/cli": "^4.1.2"
     }
 }
