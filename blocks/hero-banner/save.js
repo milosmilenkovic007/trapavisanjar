@@ -5,7 +5,12 @@ const Save = ({ attributes }) => {
 
     return (
         <div { ...useBlockProps.save({ className: 'hero-banner', 'data-glb-url': threeModelUrl }) }>
-            { bgImage && <img src={bgImage} alt="Hero Background" className="hero-banner-bg" /> }
+            { bgImage && (
+                <>
+                    <img src={bgImage} alt="Hero Background" className="hero-banner-bg" />
+                    <div className="noise-texture"></div> {/* ✅ Noise Overlay */}
+                </>
+            )}
             <div className="hero-banner-content">
                 { title && <h2 className="hero-banner-title">{title}</h2> }
                 { description && <p className="hero-banner-description">{description}</p> }
