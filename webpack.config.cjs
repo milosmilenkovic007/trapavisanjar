@@ -7,7 +7,10 @@ module.exports = {
         index: "./blocks/hero-banner/index.js",
         style: "./blocks/hero-banner/style.scss",
         editor: "./blocks/hero-banner/editor.scss",
-        view: "./blocks/hero-banner/view.js"
+        view: "./blocks/hero-banner/view.js",
+
+        // Globalni SCSS
+        theme: "./src/scss/style.scss"
     },
     output: {
         filename: (pathData) => {

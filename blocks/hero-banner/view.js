@@ -2,6 +2,7 @@
 import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, DirectionalLight, AnimationMixer, Clock, Raycaster, Vector2, LoopOnce } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { gsap } from "gsap"; // ✅ Dodaj GSAP za animaciju kamere
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("🚀 DOM Loaded - Three.js Initialized!");
@@ -32,10 +33,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const scene = new Scene();
     const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-    // ✅ PODEŠAVANJE POČETNOG UGLa KAMERE
-    camera.position.set(1, 1.5, 8); // Pomerena kamera
-    camera.lookAt(0, 1, 0);  // Gleda blago iznad centra modela
-    
+    // ✅ POČETNA POZICIJA KAMERE (Screenshot 2 - knjiga uspravna)
+    camera.position.set(1, 1.5, 8); // Blago podignuta perspektiva
+    camera.lookAt(0, 1, 0); // Gleda blago iznad centra knjige
 
     // ✅ Renderer - full screen
     const renderer = new WebGLRenderer({ antialias: true, alpha: true });
@@ -79,11 +79,12 @@ document.addEventListener("DOMContentLoaded", function () {
         function (gltf) {
             model = gltf.scene;
             scene.add(model);
-            model.position.set(0, 0, 0); // Centriraj model
+            model.position.set(0, 0, 0);
             model.scale.set(1, 1, 1); // Reset skaliranja
-        
+            model.rotation.set(0, 0, 0); // ✅ Rotiraj knjigu da stoji uspravno
 
-
+            camera.position.set(0.5, 9, 7);
+            camera.lookAt(0, 1, 0);  // Fokus na sredinu knjige
 
             console.log("✅ Model loaded!", model);
 
@@ -100,6 +101,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     isFinished = true;
                     isPlaying = false;
                     isPaused = false;
+
+                    // ✅ VRATI KAMERU U POČETNU POZICIJU nakon animacije
+                    gsap.to(camera.position, {
+                        x: 1,
+                        y: 1.5,
+                        z: 8,
+                        duration: 1.5,
+                        onUpdate: () => camera.lookAt(0, 1, 0)
+                    });
                 });
 
                 console.log("🎬 Animation loaded but NOT playing.");
@@ -137,21 +147,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (intersects.length > 0 && action) {
             if (isFinished) {
-                // ✅ Restart animacije nakon završetka
+                // ✅ Pokreni animaciju i promeni ugao kamere
                 console.log("▶️ Restarting animation!");
-                action.reset(); // Resetuje animaciju
+                action.reset();
                 action.play();
                 isFinished = false;
                 isPaused = false;
                 isPlaying = true;
+
+                // ✅ POSTEPENO POMERI KAMERU (Screenshot 3)
+                gsap.to(camera.position, {
+                    x: 0,
+                    y: 0,
+                    z: 6,
+                    duration: 1.5,
+                    onUpdate: () => camera.lookAt(0, 0, 0)
+                });
             } else if (isPlaying) {
-                // ✅ Pauziraj animaciju ako je u toku
                 console.log("⏸️ Pausing animation!");
                 action.paused = true;
                 isPaused = true;
                 isPlaying = false;
             } else if (isPaused) {
-                // ✅ Nastavi animaciju ako je pauzirana
                 console.log("▶️ Resuming animation!");
                 action.paused = false;
                 isPaused = false;
