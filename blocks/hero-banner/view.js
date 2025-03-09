@@ -3,6 +3,7 @@ import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, DirectionalLight
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { gsap } from "gsap"; // ✅ Dodaj GSAP za animaciju kamere
+import { initControls } from "./controls.js"; // ✅ Uvoz dugmadi iz controls.js
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("🚀 DOM Loaded - Three.js Initialized!");
@@ -88,12 +89,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
             console.log("✅ Model loaded!", model);
 
+        
+
             // ✅ Ako model ima animacije, učitaj prvu
             if (gltf.animations.length > 0) {
                 mixer = new AnimationMixer(model);
                 action = mixer.clipAction(gltf.animations[0]); // Uzimamo prvu animaciju
                 action.clampWhenFinished = true; // Stopira se nakon završetka
                 action.setLoop(LoopOnce); // ✅ Loop samo jednom
+                initControls(model, camera, gsap, action, mixer);
 
                 // ✅ Detektujemo kada se animacija završi preko MIXER-a
                 mixer.addEventListener("finished", () => {
